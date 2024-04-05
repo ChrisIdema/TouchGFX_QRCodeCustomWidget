@@ -9,4 +9,6 @@ It is worth mentioning that the size of the QR Code symbol depends on the versio
 
 # How to use
 
-* go to QRCodeWidget.hpp and select the correct color define QR_WIDGET_USE_<N>BIT_COLOR
+* export to tpkg file using `git archive --format=zip --output=QRCodeCustomContainer.tpkg HEAD`
+* import in TouchGFX using Edit/Import/Custom Container
+
