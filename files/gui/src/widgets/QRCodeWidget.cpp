@@ -55,89 +55,89 @@ void QRCodeWidget::draw(const touchgfx::Rect& invalidatedArea) const
 
     touchgfx::Rect absInvalidated = invalidatedArea;
     translateRectToAbsolute(absInvalidated);
-/*****************************************************************
-* Shoutout to JTP for providing this code on the ST Forum. 
-* Define QR_WIDGET_USE_8BIT_COLOR, QR_WIDGET_USE_16BIT_COLOR or
-* QR_WIDGET_USE_24BIT_COLOR in QRCodeWidget.hpp !!!
-******************************************************************/
 
-#ifdef QR_WIDGET_USE_8BIT_COLOR	
-    uint8_t* framebuffer = (uint8_t*)touchgfx::HAL::getInstance()->lockFrameBuffer();
+    auto lcdPtr = &touchgfx::HAL::lcd();
 
-    if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+    uint8_t bitDepth = lcdPtr->bitDepth();
+    if (bitDepth == 8)
     {
-        for (int y = 0; y < absInvalidated.width; y++)
-        {
-            for (int x = 0; x < absInvalidated.height; x++)
-            {
-                framebuffer[(absInvalidated.y + x) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-            }
-        }
-    }
-    else {
-        for (int y = 0; y < absInvalidated.height; y++)
-        {
-            for (int x = 0; x < absInvalidated.width; x++)
-            {
-                framebuffer[(absInvalidated.x + x) + ((absInvalidated.y + y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-            }
-        }
-    }
-#elif QR_WIDGET_USE_16BIT_COLOR
-    uint16_t* framebuffer = touchgfx::HAL::getInstance()->lockFrameBuffer();
+		uint8_t* framebuffer = (uint8_t*)touchgfx::HAL::getInstance()->lockFrameBuffer();
 
-    if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+		if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+		{
+			for (int y = 0; y < absInvalidated.width; y++)
+			{
+				for (int x = 0; x < absInvalidated.height; x++)
+				{
+					framebuffer[(absInvalidated.y + x) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+				}
+			}
+		}
+		else {
+			for (int y = 0; y < absInvalidated.height; y++)
+			{
+				for (int x = 0; x < absInvalidated.width; x++)
+				{
+					framebuffer[(absInvalidated.x + x) + ((absInvalidated.y + y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+				}
+			}
+		}
+    }
+    if (bitDepth == 16)
     {
-        for (int y = 0; y < absInvalidated.width; y++)
-        {
-            for (int x = 0; x < absInvalidated.height; x++)
-            {
-                framebuffer[(absInvalidated.y + x) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x0000 : 0xffff;
-            }
-        }
-    }
-    else {
-        for (int y = 0; y < absInvalidated.height; y++)
-        {
-            for (int x = 0; x < absInvalidated.width; x++)
-            {
-                framebuffer[(absInvalidated.x + x) + ((absInvalidated.y + y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x0000 : 0xffff;
-            }
-        }
+		uint16_t* framebuffer = touchgfx::HAL::getInstance()->lockFrameBuffer();
+
+		if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+		{
+			for (int y = 0; y < absInvalidated.width; y++)
+			{
+				for (int x = 0; x < absInvalidated.height; x++)
+				{
+					framebuffer[(absInvalidated.y + x) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x0000 : 0xffff;
+				}
+			}
+		}
+		else {
+			for (int y = 0; y < absInvalidated.height; y++)
+			{
+				for (int x = 0; x < absInvalidated.width; x++)
+				{
+					framebuffer[(absInvalidated.x + x) + ((absInvalidated.y + y) * (touchgfx::HAL::FRAME_BUFFER_WIDTH))] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x0000 : 0xffff;
+				}
+			}
+		}
     }
 
-#elif QR_WIDGET_USE_24BIT_COLOR
-    uint8_t* framebuffer = (uint8_t*)touchgfx::HAL::getInstance()->lockFrameBuffer();
-
-    if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+    if (bitDepth == 24)
     {
-        for (int y = 0; y < absInvalidated.width; y++)
-        {
-            for (int x = 0; x < absInvalidated.height; x++)
-            {
-                framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH)] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-                framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 1] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-                framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 2] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-            }
-        }
+		uint8_t* framebuffer = (uint8_t*)touchgfx::HAL::getInstance()->lockFrameBuffer();
+
+		if (touchgfx::HAL::getInstance()->DISPLAY_ROTATION == touchgfx::DisplayRotation::rotate90)
+		{
+			for (int y = 0; y < absInvalidated.width; y++)
+			{
+				for (int x = 0; x < absInvalidated.height; x++)
+				{
+					framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH)] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+					framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 1] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+					framebuffer[((absInvalidated.y + x) * 3) + ((((touchgfx::HAL::DISPLAY_WIDTH - 1) - absInvalidated.x) - y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 2] = qrcodegen_getModule(qrCodeData, (y + invalidatedArea.x) / scale, (x + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+				}
+			}
+		}
+		else{
+			for (int y = 0; y < absInvalidated.height; y++)
+			{
+				for (int x = 0; x < absInvalidated.width; x++)
+				{
+					framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH)] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+					framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 1] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+					framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 2] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
+				}
+			}
+		}
     }
-    else{
-        for (int y = 0; y < absInvalidated.height; y++)
-        {
-            for (int x = 0; x < absInvalidated.width; x++)
-            {
-                framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH)] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-                framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 1] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-                framebuffer[((absInvalidated.x + x) * 3) + ((absInvalidated.y + y) * 3) * (touchgfx::HAL::FRAME_BUFFER_WIDTH) + 2] = qrcodegen_getModule(qrCodeData, (x + invalidatedArea.x) / scale, (y + invalidatedArea.y) / scale) ? 0x00 : 0xff;
-            }
-        }
-    }
-#else
-#error "Define color depth for QR widget!"
-#endif
 
     touchgfx::HAL::getInstance()->unlockFrameBuffer();
-
 }
 
 touchgfx::Rect QRCodeWidget::getSolidRect() const
