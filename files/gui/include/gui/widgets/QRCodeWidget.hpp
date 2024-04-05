@@ -7,11 +7,6 @@
 #include "touchgfx/Unicode.hpp"
 
 
-//Uncomment based on the selected display bpp (Bit per Pixel)
-//#define QR_WIDGET_USE_8BIT_COLOR    1 
-#define QR_WIDGET_USE_16BIT_COLOR     1
-//#define QR_WIDGET_USE_24BIT_COLOR   1
-
 class QRCodeWidget : public touchgfx::Widget
 {
 public:
