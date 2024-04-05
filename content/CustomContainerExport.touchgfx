@@ -1,0 +1,23 @@
+{
+  "CustomContainerDefinitions": [
+    {
+      "Name": "QRCodeCustomContainer",
+      "Width": 150,
+      "Height": 150,
+      "Components": [
+        {
+          "Type": "Box",
+          "Name": "background",
+          "Width": 150,
+          "Height": 150,
+          "Color": {
+            "Red": 255,
+            "Green": 255,
+            "Blue": 255
+          }
+        }
+      ],
+      "Interactions": []
+    }
+  ]
+}
