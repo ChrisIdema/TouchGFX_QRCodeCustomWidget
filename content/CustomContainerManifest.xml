@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CustomContainerManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CustomContainers>
+    <CustomContainer>QRCodeCustomContainer</CustomContainer>
+  </CustomContainers>
+  <Files>
+    <File>gui/src/containers/QRCodeCustomContainer.cpp</File>
+    <File>gui/include/gui/containers/QRCodeCustomContainer.hpp</File>
+    <File>gui/include/gui/widgets/QRCodeWidget.hpp</File>
+    <File>gui/src/widgets/QRCodeWidget.cpp</File>
+    <File>gui/include/gui/widgets/qrcodegen.h</File>
+    <File>gui/src/widgets/qrcodegen.c</File>
+  </Files>
+</CustomContainerManifest>
