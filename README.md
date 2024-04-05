@@ -9,6 +9,5 @@ It is worth mentioning that the size of the QR Code symbol depends on the versio
 
 # How to use
 
-* export to tpkg file using `git archive --format=zip --output=QRCodeCustomContainer.tpkg HEAD`
-* import in TouchGFX using Edit/Import/Custom Container
+* import QRCodeCustomContainer.tpkg in TouchGFX using Edit/Import/Custom Container
 
