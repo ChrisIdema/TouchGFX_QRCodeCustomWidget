@@ -1,0 +1,2 @@
+# TouchGFX_QRCodeCustomWidget
+QRCodeCustomWidget for TouchGFX
